@@ -2,14 +2,14 @@
 apt install jq curl -y
 sub=$(cat /root/domain)
 sub2=$(tr </dev/urandom -dc a-z0-9 | head -c4)
-DOMAIN="konfig.monster"
+DOMAIN="c-bnn.xyz"
 
 if [ -z "$sub" ]; then
     sub="${sub2}"
 fi
 
-CF_ID="imanfals51@gmail.com"
-CF_KEY="0f9ed4286475de79bae2b91e9af4f8af9fed9"
+CF_ID="seaker877@gmail.com"
+CF_KEY="5365dbdd4e42096db8958cf9f49ad30a3ce12"
 IP=$(wget -qO- icanhazip.com);
 
 set -euo pipefail
