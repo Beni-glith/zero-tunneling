@@ -2,11 +2,11 @@
 https://github.com/kcepu877/izin/edit/main/ip
 
 ### INSTALL SCRIPT 
-<pre><code>apt-get update -y && apt install curl wget && wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/v4.sh && chmod +x v4.sh && ./v4.sh
+<pre><code>apt-get update -y && apt install curl wget && wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/v4.sh -O v4.sh && chmod +x v4.sh && ./v4.sh
 </code></pre>
 
 ### PERINTAH UPDATE 
-<pre><code>wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/update.sh && chmod +x update.sh && ./update.sh</code></pre>
+<pre><code>wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/update.sh -O update.sh && chmod +x update.sh && ./update.sh</code></pre>
 
 ### PERINTAH ADD DOMAIN 
 <pre><code>wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Fls/cf.sh && chmod +x cf.sh && ./cf.sh</code></pre>
