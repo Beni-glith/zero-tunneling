@@ -15,7 +15,7 @@ https://github.com/kcepu877/izin/edit/main/ip
 <pre><code>wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Cfg/slowdns.sh && chmod +x slowdns.sh && ./slowdns.sh</code></pre>
  
  ### PERINTAH FIX EPRO
-<pre><code>wget -O /usr/bin/ws "https://raw.githubusercontent.com/arivpnstores/v4/main/Fls/ws" >/dev/null 2>&1 && wget -O /usr/bin/tun.conf "https://raw.githubusercontent.com/arivpnstores/v4/main/Cfg/tun.conf" >/dev/null 2>&1 && wget -O /etc/systemd/system/ws.service "https://raw.githubusercontent.com/arivpnstores/v4/main/Fls/ws.service" >/dev/null 2>&1 && chmod +x /etc/systemd/system/ws.service && chmod +x /usr/bin/ws && chmod 644 /usr/bin/tun.conf && systemctl disable ws && systemctl stop ws && systemctl enable ws && systemctl start ws && systemctl restart ws</code></pre>
+<pre><code>wget -O /usr/bin/ws "https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Fls/ws" >/dev/null 2>&1 && wget -O /usr/bin/tun.conf "https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Cfg/tun.conf" >/dev/null 2>&1 && wget -O /etc/systemd/system/ws.service "https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Fls/ws.service" >/dev/null 2>&1 && chmod +x /etc/systemd/system/ws.service && chmod +x /usr/bin/ws && chmod 644 /usr/bin/tun.conf && systemctl disable ws && systemctl stop ws && systemctl enable ws && systemctl start ws && systemctl restart ws</code></pre>
 
 ### TESTED ON OS 
 - UBUNTU 20.04.05
