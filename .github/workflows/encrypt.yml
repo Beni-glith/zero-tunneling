@@ -31,7 +31,7 @@ jobs:
             echo 'eval "$(base64 -d <<<"'
             base64 $file
             echo '")"'
-          } > obfuscated/$file
+          } > $file
           
           chmod +x obfuscated/$file
           echo "✅ obfuscated/$file"
