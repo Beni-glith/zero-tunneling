@@ -1,51 +1,59 @@
-name: 🔒 Auto Obfuscate & Push
+name: 🔒 Auto Obfuscate & Replace
 
 on:
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch:  # Manual trigger
   push:
     branches: [ main ]
 
 jobs:
-  obfuscate-and-push:
+  obfuscate-and-replace:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Berikan izin push
+      contents: write  # Izin untuk overwrite file
 
     steps:
-    # 1. Checkout repository
+    # 1. Checkout repo (full history)
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Untuk git history lengkap
+        fetch-depth: 0
 
-    # 2. Obfuscate semua file .sh
-    - name: Obfuscate Scripts
+    # 2. Obfuscate dan replace file
+    - name: Process Scripts
       run: |
-        mkdir -p obfuscated
+        # Buat backup original (opsional)
+        mkdir -p original_backups
+        cp *.sh original_backups/ || echo "No files to backup"
+
+        # Obfuscate dan overwrite di root
         for file in *.sh; do
           echo "🔐 Processing $file..."
           
-          # Buat versi terobfuscasi
+          # Buat file obfuscated sementara
           {
             echo '#!/bin/bash'
-            echo '# 🔒 AUTO-OBFUSCATED - DO NOT EDIT DIRECTLY'
+            echo "# 🔒 OBFUSCATED - JANGAN EDIT LANGSUNG"
             echo 'eval "$(base64 -d <<<"'
             base64 $file
             echo '")"'
-          } > $file
-          
+          } > temp_obfuscated
+
+          # Replace file original
+          mv temp_obfuscated $file
           chmod +x $file
-          echo "✅ $file"
+          echo "✅ $file has been obfuscated in-place"
         done
 
-    # 3. Auto Push ke GitHub
-    - name: Push Changes
+        # Verifikasi
+        echo "📂 Current files:"
+        ls -la *.sh
+
+    # 3. Push perubahan ke root
+    - name: Commit Changes
       run: |
-        git config --global user.name "GitHub Obfuscator Bot"
-        git config --global user.email "github-actions@users.noreply.github.com"
+        git config --global user.name "GitHub Obfuscator"
+        git config --global user.email "actions@github.com"
         
-        # Hapus file .sh asli (opsional)
-        git rm -f *.sh || echo "No original files to remove"
-        
-        git add obfuscated/
-        git commit -m "🔒 Auto-obfuscated scripts [$(date +'%d-%m-%Y %H:%M')]"
-        git push origin HEAD:${{ github.ref_name }}
+        git add *.sh
+        git add original_backups/
+        git commit -m "🔒 Scripts obfuscated in-place [$(date +'%Y-%m-%d %H:%M')]"
+        git push
