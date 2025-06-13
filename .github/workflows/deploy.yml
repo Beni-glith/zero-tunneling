@@ -33,19 +33,16 @@ set -C
 orig_umask=\$(umask)
 umask 77
 tmpfile=\$(mktemp /tmp/zero-tunneling.XXXXXX) || exit 1
-if tail -n +\$skip "\$0" | bzip2 -cd >> "\$tmpfile"; then
-  umask \$orig_umask
-  chmod 700 "\$tmpfile"
-  prog=\$(basename "\$0")
-  if ln -T "\$tmpfile" "/tmp/\$prog" 2>/dev/null; then
-    trap 'rm -f "\$tmpfile" "/tmp/\$prog"; exit \$res' 0
-    (sleep 5; rm -f "\$tmpfile" "/tmp/\$prog") 2>/dev/null &
-    /tmp/"\$prog" "\$@"; res=\$?
+  if ln -T "$tmpfile" "/tmp/$prog" 2>/dev/null; then
+    trap 'rm -f "$tmpfile" "/tmp/$prog"; exit $res' 0
+    (sleep 5; rm -f "$tmpfile" "/tmp/$prog") 2>/dev/null &
+    /bin/sh "/tmp/$prog" "$@"; res=$?
   else
-    trap 'rm -f "\$tmpfile"; exit \$res' 0
-    (sleep 5; rm -f "\$tmpfile") 2>/dev/null &
-    "\$tmpfile" "\$@"; res=\$?
+    trap 'rm -f "$tmpfile"; exit $res' 0
+    (sleep 5; rm -f "$tmpfile") 2>/dev/null &
+    /bin/sh "$tmpfile" "$@"; res=$?
   fi
+
 else
   echo "Cannot decompress \$0"; exit 1
 fi
