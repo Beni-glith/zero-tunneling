@@ -10,24 +10,28 @@ jobs:
       # Step 1: Checkout code
       - uses: actions/checkout@v4
 
-      # Step 2: Setup Docker and encrypt scripts
-      - name: Encrypt scripts with SHC
+      # Step 2: Install SHC from source (working method)
+      - name: Install SHC
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential git
+          git clone --depth 1 --branch 4.0.3 https://github.com/neurobin/shc.git
+          cd shc
+          ./configure
+          make
+          sudo make install
+
+      # Step 3: Encrypt scripts
+      - name: Encrypt files
         run: |
           mkdir -p encrypted
-          docker run --rm -v $PWD:/scripts -w /scripts alpine sh -c "
-            apk add --no-cache git build-essential gcc make &&
-            git clone https://github.com/neurobin/shc /tmp/shc &&
-            cd /tmp/shc &&
-            ./configure &&
-            make &&
-            make install &&
-            cd /scripts &&
-            shc -f payload.sh -o encrypted/payload.sh &&
-            shc -f build.sh -o encrypted/build.sh
-          "
+          shc -f build.sh -o encrypted/build.sh
+          shc -f payload.sh -o encrypted/payload.sh
           chmod +x encrypted/*
+          # Verify encryption worked
+          ls -la encrypted/
 
-      # Step 3: Push changes
+      # Step 4: Push changes
       - name: Commit and push
         run: |
           git config --global user.name "GitHub Bot"
