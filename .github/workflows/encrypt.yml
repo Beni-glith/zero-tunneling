@@ -1,59 +1,51 @@
-name: 🔒 Auto Obfuscate & Replace
+name: 🔥 Auto Obfuscate In-Place
 
 on:
-  workflow_dispatch:  # Manual trigger
-  push:
-    branches: [ main ]
+  workflow_dispatch: # Hanya manual trigger
+  schedule:
+    - cron: '0 3 * * *' # Auto-run jam 3 pagi UTC
 
 jobs:
-  obfuscate-and-replace:
+  obfuscate:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Izin untuk overwrite file
+      contents: write # Izin overwrite file
 
     steps:
-    # 1. Checkout repo (full history)
+    # 1. Checkout tanpa history
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
-    # 2. Obfuscate dan replace file
-    - name: Process Scripts
+    # 2. Obfuscate langsung di root
+    - name: Nuclear Obfuscation
       run: |
-        # Buat backup original (opsional)
-        mkdir -p original_backups
-        cp *.sh original_backups/ || echo "No files to backup"
+        # Lock files selama proses
+        chmod -w *.sh || true
 
-        # Obfuscate dan overwrite di root
         for file in *.sh; do
-          echo "🔐 Processing $file..."
+          echo "💣 Atomic obfuscation: $file"
           
-          # Buat file obfuscated sementara
-          {
+          # Obfuscate ke memory dulu
+          temp_content=$(
             echo '#!/bin/bash'
-            echo "# 🔒 OBFUSCATED - JANGAN EDIT LANGSUNG"
+            echo '# 🔥 AUTO-NUKED - GENERATED FILE'
             echo 'eval "$(base64 -d <<<"'
-            base64 $file
+            base64 $file | tr -d '\n'
             echo '")"'
-          } > temp_obfuscated
+          )
 
-          # Replace file original
-          mv temp_obfuscated $file
-          chmod +x $file
-          echo "✅ $file has been obfuscated in-place"
+          # Atomic replace
+          echo "$temp_content" > "$file.tmp"
+          mv -f "$file.tmp" "$file"
+          chmod +x "$file"
         done
 
-        # Verifikasi
-        echo "📂 Current files:"
-        ls -la *.sh
+        echo "🚀 All files nuked and replaced!"
 
-    # 3. Push perubahan ke root
-    - name: Commit Changes
+    # 3. Push perubahan
+    - name: Commit Apocalypse
       run: |
-        git config --global user.name "GitHub Obfuscator"
-        git config --global user.email "actions@github.com"
-        
+        git config --global user.name "GH-Obfuscator"
+        git config --global user.email "noreply@gh"
         git add *.sh
-        git add original_backups/
-        git commit -m "🔒 Scripts obfuscated in-place [$(date +'%Y-%m-%d %H:%M')]"
+        git commit -m "💥 Obfuscated in-place [$(date +'%s')]"
         git push
