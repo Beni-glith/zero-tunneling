@@ -8,6 +8,7 @@ on:
 jobs:
   build-installer:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -15,30 +16,35 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y bzip2
 
-      - name: Build installer.sh
+      - name: Compress build.sh
         run: |
-          chmod +x stup.sh
-          bzip2 -kf stup.sh
+          chmod +x build.sh
+          bzip2 -kf build.sh  # -> build.sh.bz2
 
-          cat > installer.sh << 'EOF'
+      - name: Create installer.sh
+        run: |
+          # Hitung jumlah baris header
+          HEADER_LINES=22
+
+          cat <<EOF > installer.sh
 #!/bin/sh
-skip=20
+skip=$HEADER_LINES
 set -C
-orig_umask=\`umask\`
+orig_umask=\$(umask)
 umask 77
-tmpfile=\`mktemp /tmp/zero-tunneling.XXXXXX\` || exit 1
+tmpfile=\$(mktemp /tmp/zero-tunneling.XXXXXX) || exit 1
 if tail -n +\$skip "\$0" | bzip2 -cd >> "\$tmpfile"; then
   umask \$orig_umask
   chmod 700 "\$tmpfile"
-  prog=\`basename "\$0"\`
+  prog=\$(basename "\$0")
   if ln -T "\$tmpfile" "/tmp/\$prog" 2>/dev/null; then
     trap 'rm -f "\$tmpfile" "/tmp/\$prog"; exit \$res' 0
     (sleep 5; rm -f "\$tmpfile" "/tmp/\$prog") 2>/dev/null &
-    /tmp/"\$prog" \${1+"\$@"}; res=\$?
+    /tmp/"\$prog" "\$@"; res=\$?
   else
     trap 'rm -f "\$tmpfile"; exit \$res' 0
     (sleep 5; rm -f "\$tmpfile") 2>/dev/null &
-    "\$tmpfile" \${1+"\$@"}; res=\$?
+    "\$tmpfile" "\$@"; res=\$?
   fi
 else
   echo "Cannot decompress \$0"; exit 1
@@ -46,10 +52,10 @@ fi
 exit \$res
 EOF
 
-          cat stup.sh.bz2 >> installer.sh
+          cat build.sh.bz2 >> installer.sh
           chmod +x installer.sh
 
-      - name: Upload installer artifact
+      - name: Upload installer.sh
         uses: actions/upload-artifact@v4
         with:
           name: installer
