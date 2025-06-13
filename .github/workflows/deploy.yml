@@ -10,23 +10,23 @@ jobs:
       # Step 1: Checkout code
       - uses: actions/checkout@v4
 
-      # Step 2: Download pre-built SHC binary
-      - name: Install SHC (pre-built)
-        run: |
-          wget https://github.com/neurobin/shc/files/936206/shc-3.8.9b.zip -O shc.zip
-          unzip shc.zip
-          chmod +x shc
-          sudo mv shc /usr/local/bin/
-
-      # Step 3: Encrypt scripts
-      - name: Encrypt files
+      # Step 2: Encrypt scripts using Docker (no installation needed)
+      - name: Encrypt scripts with SHC
         run: |
           mkdir -p encrypted
-          shc -f payload.sh -o encrypted/payload.sh
-          shc -f build.sh -o encrypted/build.sh
+          docker run --rm -v $PWD:/scripts alpine sh -c "
+            apk add --no-cache git build-essential gcc make &&
+            git clone https://github.com/neurobin/shc /tmp/shc &&
+            cd /tmp/shc &&
+            ./configure &&
+            make install &&
+            cd &&
+            shc -f payload.sh -o encrypted/payload.sh
+            shc -f build.sh -o encrypted/build.sh
+          "
           chmod +x encrypted/*
 
-      # Step 4: Push changes
+      # Step 3: Push changes
       - name: Commit and push
         run: |
           git config --global user.name "GitHub Bot"
