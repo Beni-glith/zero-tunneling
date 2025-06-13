@@ -1,9 +1,7 @@
-name: 🔐 Auto Encrypt-Push (Fixed)
+name: 🔒 Auto Encrypt & Push
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 3 * * *'
+  workflow_dispatch:  # Hanya manual trigger
 
 jobs:
   encrypt-push:
@@ -12,34 +10,26 @@ jobs:
       # 1. Checkout repo
       - uses: actions/checkout@v4
 
-      # 2. Install SHC dari source (metode resmi)
-      - name: Install SHC
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential git
-          git clone --depth 1 https://github.com/neurobin/shc
-          cd shc
-          ./configure
-          make
-          sudo make install
-          shc -v  # Verifikasi instalasi
-
-      # 3. Enkripsi script
-      - name: Encrypt scripts
+      # 2. PAKAI SHC YANG SUDAH TERINSTAL (Ubuntu sudah include)
+      - name: Encrypt Scripts
         run: |
           mkdir -p encrypted
+          sudo apt-get install -y shc  # Ini versi stable dari Ubuntu repo
+          
+          # Enkripsi semua .sh di root
           for script in *.sh; do
-            echo "🔒 Encrypting $script..."
+            echo "🔐 Encrypting $script..."
             shc -f "$script" -o "encrypted/$script"
             chmod +x "encrypted/$script"
           done
-          ls -la encrypted/  # Tampilkan hasil
 
-      # 4. Push otomatis
-      - name: Push changes
+          ls -la encrypted/  # Verify
+
+      # 3. Auto Push
+      - name: Push Results
         run: |
-          git config --global user.name "GitHub Bot"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "Bot Enkripsi"
+          git config --global user.email "bot@noreply.github.com"
           git add encrypted
-          git commit -m "🔒 Auto-encrypted $(date +'%d-%m-%Y %H:%M')"
+          git commit -m "🔒 Script terenkripsi $(date +'%d/%m/%Y')"
           git push
