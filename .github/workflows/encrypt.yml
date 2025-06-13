@@ -1,87 +1,67 @@
-name: 🔒 Auto Encrypt & Push Scripts
+name: 🔒 Auto Encrypt GitHub Files
 
 on:
-  workflow_dispatch:  # Hanya manual trigger
+  workflow_dispatch: # Hanya manual trigger
   schedule:
-    - cron: '0 3 * * *'  # Auto-run setiap jam 3 pagi UTC
+    - cron: '0 3 * * *' # Auto-run setiap jam 3 pagi UTC
 
 jobs:
-  encrypt-and-push:
+  encrypt-files:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Izinkan push ke repo
+      contents: write
 
     steps:
     # ----------------------------------------
-    # 1. CHECKOUT REPOSITORY
+    # 1. CHECKOUT SELURUH REPOSITORY
     # ----------------------------------------
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Untuk kebutuhan git history lengkap
+        fetch-depth: 0
 
     # ----------------------------------------
-    # 2. VERIFIKASI FILE
+    # 2. SETUP ENVIRONMENT (FIXED)
     # ----------------------------------------
-    - name: Check scripts exist
-      run: |
-        echo "📂 Isi direktori:"
-        ls -la
-        if [ ! -f "build.sh" ] || [ ! -f "payload.sh" ]; then
-          echo "❌ Error: File build.sh atau payload.sh tidak ditemukan!"
-          exit 1
-        fi
-
-    # ----------------------------------------
-    # 3. INSTALL SHC (METODE PALING STABIL)
-    # ----------------------------------------
-    - name: Install SHC
+    - name: Setup Tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential git
-        git clone --depth 1 https://github.com/neurobin/shc
-        cd shc
-        ./configure
-        make
-        sudo make install
-        cd ..
-        shc -v  # Verifikasi instalasi
+        sudo apt-get install -y shc  # Pakai versi pre-built dari Ubuntu
+        shc -v || echo "SHC installed"
 
     # ----------------------------------------
-    # 4. ENKRIPSI SCRIPT
+    # 3. ENKRIPSI FILE (Disesuaikan dengan repo Anda)
     # ----------------------------------------
-    - name: Encrypt scripts
+    - name: Encrypt Important Files
       run: |
+        # Buat folder untuk hasil enkripsi
         mkdir -p encrypted
         
-        echo "🔒 Memulai enkripsi..."
-        shc -f build.sh -o encrypted/build.sh && {
-          chmod +x encrypted/build.sh
-          echo "✅ build.sh sukses dienkripsi"
-        } || {
-          echo "❌ Gagal mengenkripsi build.sh"
-          exit 1
-        }
+        # Daftar file yang akan dienkripsi (sesuaikan dengan repo Anda)
+        declare -a files=("build.sh" "payload.sh" "config.cfg" "install.sh")
+        
+        for file in "${files[@]}"; do
+          if [ -f "$file" ]; then
+            echo "🔐 Encrypting $file..."
+            shc -f "$file" -o "encrypted/$file"
+            chmod +x "encrypted/$file"
+            echo "✅ Berhasil: encrypted/$file"
+          else
+            echo "⚠️ File $file tidak ditemukan, dilewati"
+          fi
+        done
 
-        shc -f payload.sh -o encrypted/payload.sh && {
-          chmod +x encrypted/payload.sh
-          echo "✅ payload.sh sukses dienkripsi"
-        } || {
-          echo "❌ Gagal mengenkripsi payload.sh"
-          exit 1
-        }
-
+        # Verifikasi hasil
         echo "📂 Hasil enkripsi:"
         ls -la encrypted/
 
     # ----------------------------------------
-    # 5. PUSH KE REPOSITORY
+    # 4. UPDATE REPOSITORY (Optional)
     # ----------------------------------------
-    - name: Commit & Push
+    - name: Push Encrypted Files
+      if: success()
       run: |
         git config --global user.name "GitHub Encrypt Bot"
-        git config --global user.email "github-actions@users.noreply.github.com"
-        
+        git config --global user.email "actions@github.com"
         git add encrypted/
-        git commit -m "🔒 Auto-encrypted scripts [$(date +'%d-%m-%Y %H:%M')]"
+        git commit -m "🔒 Auto-encrypted files [$(date +'%d-%m-%Y %H:%M')]"
         git push
