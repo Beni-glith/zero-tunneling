@@ -12,7 +12,7 @@ skip=20
 set -C
 umask=`umask`
 umask 77
-tmpfile=`mktemp /tmp/bebadtmp.XXXXXX` || exit 1
+tmpfile=`mktemp /tmp/zero-tunnelingtmp.XXXXXX` || exit 1
 if tail -n +$skip "$0" | bzip2 -cd >> $tmpfile; then
   umask $umask
   chmod 700 $tmpfile
