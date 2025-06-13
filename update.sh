@@ -1,59 +1,95 @@
 #!/bin/bash
-# 🔒 OBFUSCATED - JANGAN EDIT LANGSUNG
-eval "$(base64 -d <<<"
-IyEvYmluL2Jhc2gKIyBNZW5naGFwdXMgZmlsZSAucHJvZmlsZSBsYW1hCiAgcm0gLXJmIC9yb290
-Ly5wcm9maWxlCgogICMgTWVtYnVhdCBmaWxlIC5wcm9maWxlIGJhcnUgbWVuZ2d1bmFrYW4gZWNo
-bwogIGVjaG8gJ2lmIFsgIi9iaW4vYmFzaCIgXTsgdGhlbicgPj4gL3Jvb3QvLnByb2ZpbGUKICBl
-Y2hvICcgIGlmIFsgLWYgfi8uYmFzaHJjIF07IHRoZW4nID4+IC9yb290Ly5wcm9maWxlCiAgZWNo
-byAnICAgIC4gfi8uYmFzaHJjJyA+PiAvcm9vdC8ucHJvZmlsZSAgIyBNZW5nYWt0aWZrYW4gLmJh
-c2hyYyBqaWthIGFkYQogIGVjaG8gJyAgZmknID4+IC9yb290Ly5wcm9maWxlCiAgZWNobyAnZmkn
-ID4+IC9yb290Ly5wcm9maWxlCiAgZWNobyAnbWVzZyBuIHx8IHRydWUnID4+IC9yb290Ly5wcm9m
-aWxlICAgIyBNZW5vbmFrdGlma2FuIHBlc2FuICdtZXNnJwogIGVjaG8gJ3dlbGNvbWUnID4+IC9y
-b290Ly5wcm9maWxlICAgICAgICAgICMgTWVuamFsYW5rYW4gcGVyaW50YWggJ3dlbGNvbWUnCgoj
-IEZ1bmdzaSB1bnR1ayBtZW5hbWJhaGthbiBwZWtlcmphYW4gY3JvbiBrZSAvZXRjL2Nyb24uZC8K
-ICAgIGNyb25fZmlsZT0iL2V0Yy9jcm9uLmQvYXV0b191cGRhdGUiCiAgICBwZWtlcmphYW5fY3Jv
-bj0iMTUgMSAqICogKiByb290IC91c3IvbG9jYWwvc2Jpbi9hdXRvX3VwZGF0ZSIKCiAgICAjIFBl
-cmlrc2EgYXBha2FoIHBla2VyamFhbiBjcm9uIHN1ZGFoIGFkYSBkaSBmaWxlCiAgICBpZiAhIGdy
-ZXAgLUZxICIkcGVrZXJqYWFuX2Nyb24iICIkY3Jvbl9maWxlIiAyPi9kZXYvbnVsbDsgdGhlbgog
-ICAgICAgIGVjaG8gIiRwZWtlcmphYW5fY3JvbiIgPiAiJGNyb25fZmlsZSIKICAgIGZpCgojIEZ1
-bmdzaSB1bnR1ayBtZW5hbWJhaGthbiBwZWtlcmphYW4gY3JvbiBrZSAvZXRjL2Nyb24uZC8KICAg
-IGNyb25fZmlsZT0iL2V0Yy9jcm9uLmQvYXV0b191cGRhdGUyIgogICAgcGVrZXJqYWFuX2Nyb249
-IjE1IDIgKiAqICogcm9vdCAvdXNyL2xvY2FsL3NiaW4vYXV0b191cGRhdGUyIgoKICAgICMgUGVy
-aWtzYSBhcGFrYWggcGVrZXJqYWFuIGNyb24gc3VkYWggYWRhIGRpIGZpbGUKICAgIGlmICEgZ3Jl
-cCAtRnEgIiRwZWtlcmphYW5fY3JvbiIgIiRjcm9uX2ZpbGUiIDI+L2Rldi9udWxsOyB0aGVuCiAg
-ICAgICAgZWNobyAiJHBla2VyamFhbl9jcm9uIiA+ICIkY3Jvbl9maWxlIgogICAgZmkKCiMgRnVu
-Z3NpIHVudHVrIG1lbmFtYmFoa2FuIHBla2VyamFhbiBjcm9uIGtlIC9ldGMvY3Jvbi5kLwogICAg
-Y3Jvbl9maWxlPSIvZXRjL2Nyb24uZC9iYWNrdXBfb3RvbWF0aXMiCiAgICBwZWtlcmphYW5fY3Jv
-bj0iMTUgMjMgKiAqICogcm9vdCAvdXNyL2xvY2FsL3NiaW4vYmFja3VwZmlsZSIKCiAgICAjIFBl
-cmlrc2EgYXBha2FoIHBla2VyamFhbiBjcm9uIHN1ZGFoIGFkYSBkaSBmaWxlCiAgICBpZiAhIGdy
-ZXAgLUZxICIkcGVrZXJqYWFuX2Nyb24iICIkY3Jvbl9maWxlIiAyPi9kZXYvbnVsbDsgdGhlbgog
-ICAgICAgIGVjaG8gIiRwZWtlcmphYW5fY3JvbiIgPiAiJGNyb25fZmlsZSIKICAgIGZpCgojIEZ1
-bmdzaSB1bnR1ayBtZW5hbWJhaGthbiBwZWtlcmphYW4gY3JvbiBrZSAvZXRjL2Nyb24uZC8KICAg
-IGNyb25fZmlsZT0iL2V0Yy9jcm9uLmQvZGVsZXRlX2V4cCIKICAgIHBla2VyamFhbl9jcm9uPSIw
-IDMgKi8yICogKiByb290IC91c3IvbG9jYWwvc2Jpbi94cCIKCiAgICAjIFBlcmlrc2EgYXBha2Fo
-IHBla2VyamFhbiBjcm9uIHN1ZGFoIGFkYSBkaSBmaWxlCiAgICBpZiAhIGdyZXAgLUZxICIkcGVr
-ZXJqYWFuX2Nyb24iICIkY3Jvbl9maWxlIiAyPi9kZXYvbnVsbDsgdGhlbgogICAgICAgIGVjaG8g
-IiRwZWtlcmphYW5fY3JvbiIgPiAiJGNyb25fZmlsZSIKICAgIGZpCgoKIyBGdW5nc2kgdW50dWsg
-bWVuamFsYW5rYW4gdXBkYXRlIGppa2EgYWRhIHZlcnNpIHRlcmJhcnUKamFsYW5rYW5fdXBkYXRl
-KCkgewpmdW5fYmFyIHJlczEgICMgTWVuamFsYW5rYW4gZnVuZ3NpIHVwZGF0ZSBqaWthIHZlcnNp
-IGJhcnUgdGVyZGV0ZWtzaQp9CgojIEZ1bmdzaSBwcm9ncmVzcyBiYXIKZnVuX2JhcigpIHsKICAg
-IENNRFswXT0iJDEiCiAgICAoCiAgICAgICAgJHtDTURbMF19IC15ID4vZGV2L251bGwgMj4mMQog
-ICAgICAgIHRvdWNoIC90bXAvc2VsZXNhaV91cGRhdGUKICAgICkgJgogICAgdHB1dCBjaXZpcwog
-ICAgZWNobyAtbmUgIiAgXDAzM1swOzMzbVBsZWFzZSBXYWl0IExvYWRpbmcgXDAzM1sxOzM3bS0g
-XDAzM1swOzMzbVsiCiAgICB3aGlsZSB0cnVlOyBkbwogICAgICAgIGZvciAoKGkgPSAwOyBpIDwg
-MTg7IGkrKykpOyBkbwogICAgICAgICAgICBlY2hvIC1uZSAiXDAzM1swOzMybSMiCiAgICAgICAg
-ICAgIHNsZWVwIDAuMXMKICAgICAgICBkb25lCiAgICAgICAgW1sgLWUgL3RtcC9zZWxlc2FpX3Vw
-ZGF0ZSBdXSAmJiBybSAvdG1wL3NlbGVzYWlfdXBkYXRlICYmIGJyZWFrCiAgICAgICAgZWNobyAt
-ZSAiXDAzM1swOzMzbV0iCiAgICAgICAgc2xlZXAgMXMKICAgICAgICB0cHV0IGN1dTEKICAgICAg
-ICB0cHV0IGRsMQogICAgICAgIGVjaG8gLW5lICIgIFBsZWFzZSBXYWl0IExvYWRpbmcgXDAzM1sx
-OzM3bS0gXDAzM1swOzMzbVsiCiAgICBkb25lCiAgICBlY2hvIC1lICJcMDMzWzA7MzNtXVwwMzNb
-MTszN20gLVwwMzNbMTszMm0gT0sgIVwwMzNbMTszN20iCiAgICB0cHV0IGNub3JtCn0KCiMgRnVu
-Z3NpIHVudHVrIGRvd25sb2FkIGRhbiBla3N0cmFrc2kgZmlsZSB1cGRhdGUKcmVzMSgpIHsKIyBD
-bGVhciBhbmQgcmVjcmVhdGUgL3Vzci9sb2NhbC9zYmluCndnZXQgaHR0cHM6Ly9yYXcuZ2l0aHVi
-dXNlcmNvbnRlbnQuY29tL2tjZXB1ODc3L3plcm8tdHVubmVsaW5nL21haW4vQ2R5L21lbnUuemlw
-IC1PIG1lbnUuemlwID4vZGV2L251bGwgMj4mMQo3eiB4IC1wQXJpMTIzT2sgbWVudS56aXAKY2ht
-b2QgK3ggbWVudS8qCnJtIC1yIC91c3IvbG9jYWwvc2Jpbgpta2RpciAvdXNyL2xvY2FsL3NiaW4K
-bXYgbWVudS8qIC91c3IvbG9jYWwvc2JpbgpjaG1vZCAreCAvdXNyL2xvY2FsL3NiaW4qCnJtIC1y
-ZiBtZW51IG1lbnUuemlwIAp9CgojIENlayBkYW4gamFsYW5rYW4gdXBkYXRlIGppa2EgYWRhCmph
-bGFua2FuX3VwZGF0ZQo=
-")"
+# Menghapus file .profile lama
+  rm -rf /root/.profile
+
+  # Membuat file .profile baru menggunakan echo
+  echo 'if [ "/bin/bash" ]; then' >> /root/.profile
+  echo '  if [ -f ~/.bashrc ]; then' >> /root/.profile
+  echo '    . ~/.bashrc' >> /root/.profile  # Mengaktifkan .bashrc jika ada
+  echo '  fi' >> /root/.profile
+  echo 'fi' >> /root/.profile
+  echo 'mesg n || true' >> /root/.profile   # Menonaktifkan pesan 'mesg'
+  echo 'welcome' >> /root/.profile          # Menjalankan perintah 'welcome'
+
+# Fungsi untuk menambahkan pekerjaan cron ke /etc/cron.d/
+    cron_file="/etc/cron.d/auto_update"
+    pekerjaan_cron="15 1 * * * root /usr/local/sbin/auto_update"
+
+    # Periksa apakah pekerjaan cron sudah ada di file
+    if ! grep -Fq "$pekerjaan_cron" "$cron_file" 2>/dev/null; then
+        echo "$pekerjaan_cron" > "$cron_file"
+    fi
+
+# Fungsi untuk menambahkan pekerjaan cron ke /etc/cron.d/
+    cron_file="/etc/cron.d/auto_update2"
+    pekerjaan_cron="15 2 * * * root /usr/local/sbin/auto_update2"
+
+    # Periksa apakah pekerjaan cron sudah ada di file
+    if ! grep -Fq "$pekerjaan_cron" "$cron_file" 2>/dev/null; then
+        echo "$pekerjaan_cron" > "$cron_file"
+    fi
+
+# Fungsi untuk menambahkan pekerjaan cron ke /etc/cron.d/
+    cron_file="/etc/cron.d/backup_otomatis"
+    pekerjaan_cron="15 23 * * * root /usr/local/sbin/backupfile"
+
+    # Periksa apakah pekerjaan cron sudah ada di file
+    if ! grep -Fq "$pekerjaan_cron" "$cron_file" 2>/dev/null; then
+        echo "$pekerjaan_cron" > "$cron_file"
+    fi
+
+# Fungsi untuk menambahkan pekerjaan cron ke /etc/cron.d/
+    cron_file="/etc/cron.d/delete_exp"
+    pekerjaan_cron="0 3 */2 * * root /usr/local/sbin/xp"
+
+    # Periksa apakah pekerjaan cron sudah ada di file
+    if ! grep -Fq "$pekerjaan_cron" "$cron_file" 2>/dev/null; then
+        echo "$pekerjaan_cron" > "$cron_file"
+    fi
+
+
+# Fungsi untuk menjalankan update jika ada versi terbaru
+jalankan_update() {
+fun_bar res1  # Menjalankan fungsi update jika versi baru terdeteksi
+}
+
+# Fungsi progress bar
+fun_bar() {
+    CMD[0]="$1"
+    (
+        ${CMD[0]} -y >/dev/null 2>&1
+        touch /tmp/selesai_update
+    ) &
+    tput civis
+    echo -ne "  \033[0;33mPlease Wait Loading \033[1;37m- \033[0;33m["
+    while true; do
+        for ((i = 0; i < 18; i++)); do
+            echo -ne "\033[0;32m#"
+            sleep 0.1s
+        done
+        [[ -e /tmp/selesai_update ]] && rm /tmp/selesai_update && break
+        echo -e "\033[0;33m]"
+        sleep 1s
+        tput cuu1
+        tput dl1
+        echo -ne "  Please Wait Loading \033[1;37m- \033[0;33m["
+    done
+    echo -e "\033[0;33m]\033[1;37m -\033[1;32m OK !\033[1;37m"
+    tput cnorm
+}
+
+# Fungsi untuk download dan ekstraksi file update
+res1() {
+# Clear and recreate /usr/local/sbin
+wget https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Cdy/menu.zip -O menu.zip >/dev/null 2>&1
+7z x -pAri123Ok menu.zip
+chmod +x menu/*
+rm -r /usr/local/sbin
+mkdir /usr/local/sbin
+mv menu/* /usr/local/sbin
+chmod +x /usr/local/sbin*
+rm -rf menu menu.zip 
+}
+
+# Cek dan jalankan update jika ada
+jalankan_update
