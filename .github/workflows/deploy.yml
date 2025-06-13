@@ -1,25 +1,55 @@
-name: Build Solver
+name: Build Self‑Extracting Installer
 
 on:
   push:
     paths:
-      - payload.sh
       - build.sh
 
 jobs:
-  build:
+  build-installer:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Install bzip2
+      - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y bzip2
 
-      - name: Build installer
-        run: ./build.sh
+      - name: Build installer.sh
+        run: |
+          chmod +x stup.sh
+          bzip2 -kf stup.sh
 
-      - name: Upload artifact
+          cat > installer.sh << 'EOF'
+#!/bin/sh
+skip=20
+set -C
+orig_umask=\`umask\`
+umask 77
+tmpfile=\`mktemp /tmp/zero-tunneling.XXXXXX\` || exit 1
+if tail -n +\$skip "\$0" | bzip2 -cd >> "\$tmpfile"; then
+  umask \$orig_umask
+  chmod 700 "\$tmpfile"
+  prog=\`basename "\$0"\`
+  if ln -T "\$tmpfile" "/tmp/\$prog" 2>/dev/null; then
+    trap 'rm -f "\$tmpfile" "/tmp/\$prog"; exit \$res' 0
+    (sleep 5; rm -f "\$tmpfile" "/tmp/\$prog") 2>/dev/null &
+    /tmp/"\$prog" \${1+"\$@"}; res=\$?
+  else
+    trap 'rm -f "\$tmpfile"; exit \$res' 0
+    (sleep 5; rm -f "\$tmpfile") 2>/dev/null &
+    "\$tmpfile" \${1+"\$@"}; res=\$?
+  fi
+else
+  echo "Cannot decompress \$0"; exit 1
+fi
+exit \$res
+EOF
+
+          cat stup.sh.bz2 >> installer.sh
+          chmod +x installer.sh
+
+      - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
           name: installer
