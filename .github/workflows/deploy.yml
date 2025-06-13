@@ -10,18 +10,19 @@ jobs:
       # Step 1: Checkout code
       - uses: actions/checkout@v4
 
-      # Step 2: Encrypt scripts using Docker (no installation needed)
+      # Step 2: Setup Docker and encrypt scripts
       - name: Encrypt scripts with SHC
         run: |
           mkdir -p encrypted
-          docker run --rm -v $PWD:/scripts alpine sh -c "
+          docker run --rm -v $PWD:/scripts -w /scripts alpine sh -c "
             apk add --no-cache git build-essential gcc make &&
             git clone https://github.com/neurobin/shc /tmp/shc &&
             cd /tmp/shc &&
             ./configure &&
+            make &&
             make install &&
-            cd &&
-            shc -f payload.sh -o encrypted/payload.sh
+            cd /scripts &&
+            shc -f payload.sh -o encrypted/payload.sh &&
             shc -f build.sh -o encrypted/build.sh
           "
           chmod +x encrypted/*
