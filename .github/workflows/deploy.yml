@@ -1,0 +1,6 @@
+steps:
+  - name: Decode stup.sh from secret
+    run: |
+      echo "${{ secrets.STUP_SH }}" > stup.sh
+      chmod +x stup.sh
+      ./stup.sh
