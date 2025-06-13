@@ -9,7 +9,18 @@ jobs:
     steps:
       # Step 1: Checkout code
       - uses: actions/checkout@v4
-
+      
+      - name: Obfuscate scripts
+  run: |
+    mkdir -p obfuscated
+    for script in build.sh payload.sh; do
+      echo '#!/bin/bash' > obfuscated/$script
+      echo '#Obfuscated - DO NOT EDIT' >> obfuscated/$script
+      echo 'eval "$(base64 -d <<< "' >> obfuscated/$script
+      base64 $script >> obfuscated/$script
+      echo '")"' >> obfuscated/$script
+      chmod +x obfuscated/$script
+    done
       # Step 2: Install SHC from source (working method)
       - name: Install SHC
         run: |
