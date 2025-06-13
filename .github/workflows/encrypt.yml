@@ -1,35 +1,34 @@
-name: 🔥 Auto Obfuscate In-Place
+name: 🌐 Global SH Obfuscator
 
 on:
-  workflow_dispatch: # Hanya manual trigger
-  schedule:
-    - cron: '0 3 * * *' # Auto-run jam 3 pagi UTC
-
+  workflow_dispatch: # Manual trigger
+  
 jobs:
-  obfuscate:
+  obfuscate-all:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Izin overwrite file
+      contents: write
 
     steps:
-    # 1. Checkout tanpa history
+    # 1. Checkout seluruh repo termasuk submodules
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
 
-    # 2. Obfuscate langsung di root
+    # 2. Proses semua file .sh di seluruh folder
     - name: Nuclear Obfuscation
       run: |
-        # Lock files selama proses
-        chmod -w *.sh || true
-
-        for file in *.sh; do
-          echo "💣 Atomic obfuscation: $file"
+        # Temukan semua file .sh termasuk subfolder
+        find . -type f -name "*.sh" | while read -r file; do
+          echo "💣 Processing: $file"
           
-          # Obfuscate ke memory dulu
+          # Generate obfuscated content
           temp_content=$(
             echo '#!/bin/bash'
-            echo '# 🔥 AUTO-NUKED - GENERATED FILE'
+            echo '# 🔥 AUTO-OBFUSCATED - DO NOT EDIT'
             echo 'eval "$(base64 -d <<<"'
-            base64 $file | tr -d '\n'
+            base64 "$file" | tr -d '\n'
             echo '")"'
           )
 
@@ -37,15 +36,16 @@ jobs:
           echo "$temp_content" > "$file.tmp"
           mv -f "$file.tmp" "$file"
           chmod +x "$file"
+          echo "✅ Obfuscated: $file"
         done
 
-        echo "🚀 All files nuked and replaced!"
+        echo "🌍 Total obfuscated files: $(find . -type f -name "*.sh" | wc -l)"
 
-    # 3. Push perubahan
-    - name: Commit Apocalypse
+    # 3. Push semua perubahan
+    - name: Commit Revolution
       run: |
-        git config --global user.name "GH-Obfuscator"
+        git config --global user.name "GH-Obfuscator-MK2"
         git config --global user.email "noreply@gh"
-        git add *.sh
-        git commit -m "💥 Obfuscated in-place [$(date +'%s')]"
+        git add .
+        git commit -m "🌐 Global obfuscation [$(date +'%Y%m%d-%H%M%S')]"
         git push
