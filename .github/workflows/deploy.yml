@@ -1,6 +1,26 @@
-steps:
-  - name: Decode stup.sh from secret
-    run: |
-      echo "${{ secrets.STUP_SH }}" > stup.sh
-      chmod +x stup.sh
-      ./stup.sh
+name: Build Solver
+
+on:
+  push:
+    paths:
+      - payload.sh
+      - build.sh
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install bzip2
+        run: sudo apt-get update && sudo apt-get install -y bzip2
+
+      - name: Build installer
+        run: ./build.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer
+          path: installer.sh
