@@ -1,67 +1,49 @@
-name: 🔒 Auto Encrypt GitHub Files
+name: 🔐 Simple Obfuscation Scripts
 
 on:
-  workflow_dispatch: # Hanya manual trigger
-  schedule:
-    - cron: '0 3 * * *' # Auto-run setiap jam 3 pagi UTC
+  workflow_dispatch:  # Bisa dijalankan manual
+  push:
+    branches: [ main ]
 
 jobs:
-  encrypt-files:
+  obfuscate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
-    # ----------------------------------------
-    # 1. CHECKOUT SELURUH REPOSITORY
-    # ----------------------------------------
+    # 1. Checkout kode
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
-    # ----------------------------------------
-    # 2. SETUP ENVIRONMENT (FIXED)
-    # ----------------------------------------
-    - name: Setup Tools
+    # 2. Proses Obfuscation
+    - name: Obfuscate Scripts
       run: |
-        sudo apt-get update
-        sudo apt-get install -y shc  # Pakai versi pre-built dari Ubuntu
-        shc -v || echo "SHC installed"
-
-    # ----------------------------------------
-    # 3. ENKRIPSI FILE (Disesuaikan dengan repo Anda)
-    # ----------------------------------------
-    - name: Encrypt Important Files
-      run: |
-        # Buat folder untuk hasil enkripsi
-        mkdir -p encrypted
-        
-        # Daftar file yang akan dienkripsi (sesuaikan dengan repo Anda)
-        declare -a files=("build.sh" "payload.sh" "config.cfg" "install.sh")
-        
-        for file in "${files[@]}"; do
-          if [ -f "$file" ]; then
-            echo "🔐 Encrypting $file..."
-            shc -f "$file" -o "encrypted/$file"
-            chmod +x "encrypted/$file"
-            echo "✅ Berhasil: encrypted/$file"
-          else
-            echo "⚠️ File $file tidak ditemukan, dilewati"
-          fi
+        mkdir -p obfuscated
+        for file in *.sh; do
+          echo "🔐 Processing $file..."
+          
+          # Buat file baru dengan shebang
+          echo '#!/bin/bash' > obfuscated/$file
+          echo '# 🔒 Script terenkripsi - Jangan edit langsung' >> obfuscated/$file
+          
+          # Tambahkan perintah decode
+          echo 'eval "$(base64 -d <<<"' >> obfuscated/$file
+          
+          # Encode script asli
+          base64 $file >> obfuscated/$file
+          
+          # Tutup perintah eval
+          echo '")"' >> obfuscated/$file
+          
+          # Berikan permission execute
+          chmod +x obfuscated/$file
+          echo "✅ Berhasil: obfuscated/$file"
         done
 
-        # Verifikasi hasil
-        echo "📂 Hasil enkripsi:"
-        ls -la encrypted/
+        # Verifikasi
+        echo "📂 Hasil:"
+        ls -la obfuscated/
 
-    # ----------------------------------------
-    # 4. UPDATE REPOSITORY (Optional)
-    # ----------------------------------------
-    - name: Push Encrypted Files
+    # 3. Upload hasil (opsional)
+    - uses: actions/upload-artifact@v4
       if: success()
-      run: |
-        git config --global user.name "GitHub Encrypt Bot"
-        git config --global user.email "actions@github.com"
-        git add encrypted/
-        git commit -m "🔒 Auto-encrypted files [$(date +'%d-%m-%Y %H:%M')]"
-        git push
+      with:
+        name: obfuscated-scripts
+        path: obfuscated/
