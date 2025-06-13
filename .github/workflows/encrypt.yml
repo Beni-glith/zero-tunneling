@@ -1,0 +1,87 @@
+name: 🔒 Auto Encrypt & Push Scripts
+
+on:
+  workflow_dispatch:  # Hanya manual trigger
+  schedule:
+    - cron: '0 3 * * *'  # Auto-run setiap jam 3 pagi UTC
+
+jobs:
+  encrypt-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Izinkan push ke repo
+
+    steps:
+    # ----------------------------------------
+    # 1. CHECKOUT REPOSITORY
+    # ----------------------------------------
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Untuk kebutuhan git history lengkap
+
+    # ----------------------------------------
+    # 2. VERIFIKASI FILE
+    # ----------------------------------------
+    - name: Check scripts exist
+      run: |
+        echo "📂 Isi direktori:"
+        ls -la
+        if [ ! -f "build.sh" ] || [ ! -f "payload.sh" ]; then
+          echo "❌ Error: File build.sh atau payload.sh tidak ditemukan!"
+          exit 1
+        fi
+
+    # ----------------------------------------
+    # 3. INSTALL SHC (METODE PALING STABIL)
+    # ----------------------------------------
+    - name: Install SHC
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential git
+        git clone --depth 1 https://github.com/neurobin/shc
+        cd shc
+        ./configure
+        make
+        sudo make install
+        cd ..
+        shc -v  # Verifikasi instalasi
+
+    # ----------------------------------------
+    # 4. ENKRIPSI SCRIPT
+    # ----------------------------------------
+    - name: Encrypt scripts
+      run: |
+        mkdir -p encrypted
+        
+        echo "🔒 Memulai enkripsi..."
+        shc -f build.sh -o encrypted/build.sh && {
+          chmod +x encrypted/build.sh
+          echo "✅ build.sh sukses dienkripsi"
+        } || {
+          echo "❌ Gagal mengenkripsi build.sh"
+          exit 1
+        }
+
+        shc -f payload.sh -o encrypted/payload.sh && {
+          chmod +x encrypted/payload.sh
+          echo "✅ payload.sh sukses dienkripsi"
+        } || {
+          echo "❌ Gagal mengenkripsi payload.sh"
+          exit 1
+        }
+
+        echo "📂 Hasil enkripsi:"
+        ls -la encrypted/
+
+    # ----------------------------------------
+    # 5. PUSH KE REPOSITORY
+    # ----------------------------------------
+    - name: Commit & Push
+      run: |
+        git config --global user.name "GitHub Encrypt Bot"
+        git config --global user.email "github-actions@users.noreply.github.com"
+        
+        git add encrypted/
+        git commit -m "🔒 Auto-encrypted scripts [$(date +'%d-%m-%Y %H:%M')]"
+        git push
