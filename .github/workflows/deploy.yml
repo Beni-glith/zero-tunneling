@@ -10,23 +10,20 @@ jobs:
       # Step 1: Checkout code
       - uses: actions/checkout@v4
 
-      # Step 2: Install SHC from source (working method)
-      - name: Install SHC
+      # Step 2: Download pre-built SHC binary
+      - name: Install SHC (pre-built)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential git
-          git clone https://github.com/neurobin/shc.git
-          cd shc
-          ./configure
-          make
-          sudo make install
+          wget https://github.com/neurobin/shc/files/936206/shc-3.8.9b.zip -O shc.zip
+          unzip shc.zip
+          chmod +x shc
+          sudo mv shc /usr/local/bin/
 
       # Step 3: Encrypt scripts
       - name: Encrypt files
         run: |
           mkdir -p encrypted
-          shc -f build.sh -o encrypted/build.sh
           shc -f payload.sh -o encrypted/payload.sh
+          shc -f build.sh -o encrypted/build.sh
           chmod +x encrypted/*
 
       # Step 4: Push changes
