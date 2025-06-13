@@ -1,34 +1,39 @@
 name: 🔐 Auto Encrypt-Push
 
 on:
-  workflow_dispatch:  # Hanya manual trigger (untuk hindari loop)
+  workflow_dispatch:  # Manual trigger only
 
 jobs:
   encrypt-push:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout tanpa credential
+      # Step 1: Checkout code
       - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
-      # Step 2: Encrypt dengan SHC (versi pre-built)
-      - run: |
-          curl -LO https://github.com/neurobin/shc/releases/download/4.0.3/shc-4.0.3.tar.gz
-          tar -xzf shc-4.0.3.tar.gz
-          cd shc-4.0.3
+      # Step 2: Install SHC from source (working method)
+      - name: Install SHC
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential git
+          git clone https://github.com/neurobin/shc.git
+          cd shc
           ./configure
           make
           sudo make install
 
-          mkdir encrypted
-          shc -f install.sh -o encrypted/install.sh
+      # Step 3: Encrypt scripts
+      - name: Encrypt files
+        run: |
+          mkdir -p encrypted
           shc -f build.sh -o encrypted/build.sh
-          
-      # Step 3: Push dengan GitHub-native auth
-      - run: |
-          git config --global user.name "AutoBot"
-          git config --global user.email "auto@bot.noreply"
+          shc -f payload.sh -o encrypted/payload.sh
+          chmod +x encrypted/*
+
+      # Step 4: Push changes
+      - name: Commit and push
+        run: |
+          git config --global user.name "GitHub Bot"
+          git config --global user.email "actions@github.com"
           git add encrypted
-          git commit -m "🔒 Auto-encrypted $(date +'%Y-%m-%d')"
+          git commit -m "🔒 Auto-encrypted $(date +'%Y-%m-%d %T')"
           git push
