@@ -1,61 +1,46 @@
-name: Build Self‑Extracting Installer
+name: Encrypt Scripts
 
 on:
   push:
-    paths:
-      - build.sh
+    branches: [ main ]
+    paths: 
+      - 'build.sh'  # Sesuaikan dengan path script Anda
 
 jobs:
-  build-installer:
+  encrypt:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y bzip2
-
-      - name: Compress build.sh
-        run: |
-          chmod +x build.sh
-          bzip2 -kf build.sh  # -> build.sh.bz2
-
-      - name: Create installer.sh
-        run: |
-          HEADER_LINES=23
-
-          cat <<EOF > installer.sh
-#!/bin/sh
-skip=$HEADER_LINES
-set -C
-orig_umask=\$(umask)
-umask 77
-tmpfile=\$(mktemp /tmp/zero-tunneling.XXXXXX) || exit 1
-if tail -n +\$skip "\$0" | bzip2 -cd >> "\$tmpfile"; then
-  umask \$orig_umask
-  chmod 700 "\$tmpfile"
-  prog=\$(basename "\$0")
-  if ln -T "\$tmpfile" "/tmp/\$prog" 2>/dev/null; then
-    trap 'rm -f "\$tmpfile" "/tmp/\$prog"; exit \$res' 0
-    (sleep 5; rm -f "\$tmpfile" "/tmp/\$prog") 2>/dev/null &
-    /bin/sh "/tmp/\$prog" "\$@"; res=\$?
-  else
-    trap 'rm -f "\$tmpfile"; exit \$res' 0
-    (sleep 5; rm -f "\$tmpfile") 2>/dev/null &
-    /bin/sh "\$tmpfile" "\$@"; res=\$?
-  fi
-else
-  echo "Cannot decompress \$0"; exit 1
-fi
-exit \$res
-EOF
-
-          cat build.sh.bz2 >> installer.sh
-          chmod +x installer.sh
-
-      - name: Upload installer.sh
-        uses: actions/upload-artifact@v4
-        with:
-          name: installer
-          path: installer.sh
+    - uses: actions/checkout@v4
+    
+    - name: Install SHC
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+        git clone https://github.com/neurobin/shc.git
+        cd shc
+        ./configure
+        make
+        sudo make install
+        
+    - name: Encrypt scripts
+      run: |
+        mkdir -p encrypted
+        for script in scripts/*.sh; do
+          filename=$(basename "$script")
+          shc -f "$script" -o "encrypted/$filename"
+          rm "${script}.x.c"  # Hapus file C yang dihasilkan
+        done
+        
+    - name: Upload encrypted scripts
+      uses: actions/upload-artifact@v3
+      with:
+        name: encrypted-scripts
+        path: encrypted/
+        
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add encrypted/
+        git commit -m "Auto-encrypt scripts"
+        git push
