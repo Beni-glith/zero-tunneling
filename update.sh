@@ -94,18 +94,6 @@ function menu() {
   echo ""
   echo "Menjalankan fungsi MENU..."
   # Tambahkan isi menu di sini
-  Select_Display  # Langsung kembali ke menu tanpa delay
+  menu  # Langsung kembali ke menu tanpa delay
 }
 
-function Select_Display() {
-  clear
-  echo "1) MENU"
-  read -p "Pilih opsi [1]: " hallo
-  case $hallo in
-    1) clear; menu ;;
-    *) clear; menu ;;
-  esac
-}
-
-# Jalankan awal
-Select_Display
