@@ -19,7 +19,7 @@ if [ -f "$BANNER_PATH" ]; then
         echo "Banner $BANNER_PATH" >> /etc/ssh/sshd_config
 
     echo -e "${GREEN}▶ Mengatur banner untuk Dropbear...${NC}"
-    sed -i 's|^DROPBEAR_BANNER=.*|DROPBEAR_BANNER="/etc/banner.txt"|' /etc/default/dropbear
+    sed -i 's|^DROPBEAR_BANNER=.*|DROPBEAR_BANNER="/etc/baner.txt"|' /etc/default/dropbear
 
     echo -e "${GREEN}▶ Restarting layanan SSH dan Dropbear...${NC}"
     systemctl restart ssh >/dev/null 2>&1 || service ssh restart
