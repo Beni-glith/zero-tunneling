@@ -23,10 +23,10 @@
 <font color='#FFFFFF'>⚪═══════════════════════⚪</font><br><br>
 
 <font color='#00FFA7'>📱 Hubungi Kami:</font><br>
-<a href="https://wa.me/6281335135082" target="_blank">
+https://wa.me/6281335135082
 🟢 WhatsApp
-</a> | 
-<a href="https://t.me/seaker877" target="_blank">
+ <br>
+https://t.me/seaker877
 🔵 Telegram
-</a>
+
 </p></b>
