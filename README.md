@@ -8,6 +8,11 @@ https://github.com/kcepu877/izin/edit/main/ip
 ### PERINTAH UPDATE 
 <pre><code>wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/update.sh -O update.sh && chmod +x update.sh && ./update.sh</code></pre>
 
+
+###  FIX UPDATE SCRIPT 
+<pre><code>apt-get update -y && apt install curl wget && wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/v44.sh -O v44.sh && chmod +x v44.sh && ./v44.sh
+</code></pre>
+
 ### PERINTAH ADD DOMAIN 
 <pre><code>wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Fls/cf.sh && chmod +x cf.sh && ./cf.sh</code></pre>
 
