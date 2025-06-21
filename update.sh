@@ -88,28 +88,3 @@ jalankan_update
 # =======================
 # Tambahan: Banner setup
 # =======================
-BANNER_URL="https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/banner.txt"
-BANNER_PATH="/etc/banner.txt"
-
-echo -e "\n▶ Mengunduh dan mengatur banner login..."
-wget -q "$BANNER_URL" -O "$BANNER_PATH"
-
-if [ -f "$BANNER_PATH" ]; then
-    echo "✅ Banner diunduh ke $BANNER_PATH"
-
-    # Konfigurasi SSH
-    grep -q "^Banner" /etc/ssh/sshd_config && \
-        sed -i "s|^Banner .*|Banner $BANNER_PATH|" /etc/ssh/sshd_config || \
-        echo "Banner $BANNER_PATH" >> /etc/ssh/sshd_config
-
-    # Konfigurasi Dropbear
-    sed -i 's|^DROPBEAR_BANNER=.*|DROPBEAR_BANNER="/etc/banner.txt"|' /etc/default/dropbear
-
-    # Restart layanan
-    systemctl restart ssh >/dev/null 2>&1 || service ssh restart
-    systemctl restart dropbear >/dev/null 2>&1 || service dropbear restart
-
-    echo "✅ Banner berhasil diterapkan ke SSH dan Dropbear."
-else
-    echo "❌ Gagal mengunduh banner."
-fi
