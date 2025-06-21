@@ -1,7 +1,7 @@
 <b><p style="text-align:center">
 <font color='#FFFFFF'>⚪═══════════════════════⚪<br></font>
 <i><big><big>
-<font color='#00FFFF'>K-CHESR</font>
+<font color='#00FFFF'>ZERO</font>
 <font color='#FEA600'>VPN</font>
 <font color='#FFD800'>-S</font>
 <font color='#EAFF00'>T</font>
