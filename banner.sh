@@ -1,7 +1,7 @@
 #!/bin/bash
 
-BANNER_URL="https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/banner.txt"
-BANNER_PATH="/etc/banner.txt"
+BANNER_URL="https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/baner.txt"
+BANNER_PATH="/etc/baner.txt"
 
 # Warna
 GREEN='\033[0;32m'
