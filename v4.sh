@@ -52,6 +52,10 @@ echo -e "${EROR} IP Address ( ${RED}Not Detected${NC} )"
 else
 echo -e "${OK} IP Address ( ${green}$IP${NC} )"
 fi
+echo ""
+read -p "$( echo -e "Press ${GRAY}[ ${NC}${green}Enter${NC} ${GRAY}]${NC} For Starting Installation") "
+echo ""
+clear
 if [ "${EUID}" -ne 0 ]; then
 echo "You need to run this script as root"
 exit 1
@@ -60,32 +64,6 @@ if [ "$(systemd-detect-virt)" == "openvz" ]; then
 echo "OpenVZ is not supported"
 exit 1
 fi
-localip=$(hostname -I | cut -d\  -f1)
-hst=( `hostname` )
-dart=$(cat /etc/hosts | grep -w `hostname` | awk '{print $2}')
-if [[ "$hst" != "$dart" ]]; then
-echo "$localip $(hostname)" >> /etc/hosts
-fi
-secs_to_human() {
-echo "Installation time : $(( ${1} / 3600 )) hours $(( (${1} / 60) % 60 )) minute's $(( ${1} % 60 )) seconds"
-}
-rm -rf /etc/rmbl
-mkdir -p /etc/rmbl
-mkdir -p /etc/rmbl/theme
-mkdir -p /var/lib/ >/dev/null 2>&1
-echo "IP=" >> /var/lib/ipvps.conf
-clear
-echo -e "${BIBlue}╭══════════════════════════════════════════╮${NC}"
-echo -e "${BIBlue}│ ${BGCOLOR}             MASUKKAN NAMA KAMU         ${NC}${BIBlue} │${NC}"
-echo -e "${BIBlue}╰══════════════════════════════════════════╯${NC}"
-echo " "
-name="ZERO TUNNELING"
-rm -rf /etc/profil
-echo "$name" > /etc/profil
-echo ""
-clear
-author=$(cat /etc/profil)
-echo ""
 red='\e[1;31m'
 green='\e[0;32m'
 NC='\e[0m'
@@ -275,10 +253,10 @@ echo $host1 > /etc/xray/domain
 echo $host1 > /root/domain
 wget ${REPO}Fls/cf2.sh && chmod +x cf2.sh && ./cf2.sh
 rm -f /root/cf2.sh
-if [[ -z "$nama1" ]]; then
+if [[ -z "$nama" ]]; then
   echo "   ZERO TUNNELING   " > /etc/xray/username
 else
-  echo "$nama1" > /etc/xray/username
+  echo "$nama" > /etc/xray/username
 fi
 echo ""
 elif [[ $host == "2" ]]; then
@@ -976,12 +954,11 @@ rm -rf /root/LICENSE
 rm -rf /root/README.md
 rm -rf /root/domain
 secs_to_human "$(($(date +%s) - ${start}))"
-sudo hostnamectl set-hostname $usernameclear
-clear
-wget -O /usr/bin/ws "https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Fls/ws" >/dev/null 2>&1 && wget -O /usr/bin/tun.conf "https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Cfg/tun.conf" >/dev/null 2>&1 && wget -O /etc/systemd/system/ws.service "https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Fls/ws.service" >/dev/null 2>&1 && chmod +x /etc/systemd/system/ws.service && chmod +x /usr/bin/ws && chmod 644 /usr/bin/tun.conf && systemctl disable ws && systemctl stop ws && systemctl enable ws && systemctl start ws && systemctl restart ws
+sudo hostnamectl set-hostname $username
 clear
 echo -e "\033[96m==========================\033[0m"
 echo -e "\033[92m      INSTALL SUCCES      \033[0m"
 echo -e "\033[96m==========================\033[0m"
 echo -e ""
-reboot
+clear
+menu
