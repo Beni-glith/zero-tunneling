@@ -90,10 +90,6 @@ jalankan_update
 # =======================
 #!/bin/bash
 
-function menu() {
-  echo ""
-  echo "Menjalankan fungsi MENU..."
-  # Tambahkan isi menu di sini
-  menu  # Langsung kembali ke menu tanpa delay
-}
-
+sleep 1
+clear
+menu
