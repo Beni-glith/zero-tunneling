@@ -1,26 +1,26 @@
 ### IZIN SCRIPT 
-https://github.com/kcepu877/izin/edit/main/ip
+https://github.com/Beni-glith/izin/edit/main/ip
 
 ### INSTALL SCRIPT 
-<pre><code>apt-get update -y && apt install curl wget && wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/v4.sh -O v4.sh && chmod +x v4.sh && ./v4.sh
+<pre><code>apt-get update -y && apt install curl wget && wget -q https://raw.githubusercontent.com/Beni-glith/zero-tunneling/main/v4.sh -O v4.sh && chmod +x v4.sh && ./v4.sh
 </code></pre>
 
 ### PERINTAH UPDATE 
-<pre><code>wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/update.sh -O update.sh && chmod +x update.sh && ./update.sh</code></pre>
+<pre><code>wget -q https://raw.githubusercontent.com/Beni-glith/zero-tunneling/main/update.sh -O update.sh && chmod +x update.sh && ./update.sh</code></pre>
 
 
 ###  FIX UPDATE SCRIPT 
-<pre><code>apt-get update -y && apt install curl wget && wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/v44.sh -O v44.sh && chmod +x v44.sh && ./v44.sh
+<pre><code>apt-get update -y && apt install curl wget && wget -q https://raw.githubusercontent.com/Beni-glith/zero-tunneling/main/v44.sh -O v44.sh && chmod +x v44.sh && ./v44.sh
 </code></pre>
 
 ### PERINTAH ADD DOMAIN 
-<pre><code>wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Fls/cf.sh && chmod +x cf.sh && ./cf.sh</code></pre>
+<pre><code>wget -q https://raw.githubusercontent.com/Beni-glith/zero-tunneling/main/Fls/cf.sh && chmod +x cf.sh && ./cf.sh</code></pre>
 
 ### PERINTAH ADD DOMAIN SELOWDNS 
-<pre><code>wget -q https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Cfg/slowdns.sh && chmod +x slowdns.sh && ./slowdns.sh</code></pre>
+<pre><code>wget -q https://raw.githubusercontent.com/Beni-glith/zero-tunneling/main/Cfg/slowdns.sh && chmod +x slowdns.sh && ./slowdns.sh</code></pre>
  
  ### PERINTAH FIX EPRO
-<pre><code>wget -O /usr/bin/ws "https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Fls/ws" >/dev/null 2>&1 && wget -O /usr/bin/tun.conf "https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Cfg/tun.conf" >/dev/null 2>&1 && wget -O /etc/systemd/system/ws.service "https://raw.githubusercontent.com/kcepu877/zero-tunneling/main/Fls/ws.service" >/dev/null 2>&1 && chmod +x /etc/systemd/system/ws.service && chmod +x /usr/bin/ws && chmod 644 /usr/bin/tun.conf && systemctl disable ws && systemctl stop ws && systemctl enable ws && systemctl start ws && systemctl restart ws</code></pre>
+<pre><code>wget -O /usr/bin/ws "https://raw.githubusercontent.com/Beni-glith/zero-tunneling/main/Fls/ws" >/dev/null 2>&1 && wget -O /usr/bin/tun.conf "https://raw.githubusercontent.com/Beni-glith/zero-tunneling/main/Cfg/tun.conf" >/dev/null 2>&1 && wget -O /etc/systemd/system/ws.service "https://raw.githubusercontent.com/Beni-glith/zero-tunneling/main/Fls/ws.service" >/dev/null 2>&1 && chmod +x /etc/systemd/system/ws.service && chmod +x /usr/bin/ws && chmod 644 /usr/bin/tun.conf && systemctl disable ws && systemctl stop ws && systemctl enable ws && systemctl start ws && systemctl restart ws</code></pre>
 
 ### TESTED ON OS 
 - UBUNTU 20.04.05
